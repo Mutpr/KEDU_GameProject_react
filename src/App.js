@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
+
+  const handleMessenger = () => {
+    navigate('/messenger'); // 이벤트 핸들러 내에서 navigate 사용
+  };
+  
+  const handleLogin = () =>{
+    navigate('/login');
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={handleMessenger}>메신저</button><br></br>
+      <button onClick={handleLogin}>로그인</button>
     </div>
   );
 }
