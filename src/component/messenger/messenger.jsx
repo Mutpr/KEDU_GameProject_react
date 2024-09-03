@@ -1,34 +1,39 @@
-// Messenger.jsx
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWebSocket } from "../../WebSocketContext";
 
 function Messenger() {
     const navigate = useNavigate();
     const { userName } = useParams();
-    const { sendMessage, messages, isConnected } = useWebSocket();
+    const { sendMessage } = useWebSocket(); // Provider 인자 제거
+
+    const [message, setMessage] = useState([]);
     const [msg, setMsg] = useState("");
 
-    // Redirect if not logged in
-    if (!userName) {
-        alert('로그인 해주세요.');
-        navigate('/');
-    }
+    useEffect(() => {
+        if (!userName) {
+            alert('로그인 해주세요.');
+            navigate('/');
+        }
+    }, [userName, navigate]);  // Dependency 추가
 
     const handleSend = useCallback(() => {
-        if (msg !== '') {
+        if (msg.trim() !== '') {  // 사용자 입력이 비어있지 않은 경우만 처리
             const data = {
                 name: userName,
-                msg,
+                message: msg,
                 date: new Date().toLocaleString()
             };
-            sendMessage(JSON.stringify(data));  // Use context method to send message
-            setMsg("");  // Clear message input after sending
+            sendMessage(JSON.stringify(data));  // 메시지 전송
+            console.log("Sent data:", data);  // 콘솔 로그 간소화
+            setMessage(prevMessages => [...prevMessages, data]);  // 메시지 배열 업데이트
+            setMsg("");  // 입력 필드 초기화
         }
-    }, [msg, sendMessage, userName]);
+    }, [msg, userName, setMessage, sendMessage]); // 의존성 배열에 sendMessage 추가
 
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
             handleSend();
         }
     };
@@ -38,18 +43,23 @@ function Messenger() {
             <div id='chatt'>
                 <h1 id="title">WebSocket Chatting</h1>
                 <div id='talk'>
-                    {messages.map((item, idx) => (
+                    {message.map((item, idx) => (
                         <div key={idx} className={item.name === userName ? 'me' : 'other'}>
                             <span><b>{item.name}</b></span> [ {item.date} ]<br />
-                            <span>{item.msg}</span>
+                            <span>{item.message}</span>
                         </div>
                     ))}
                 </div>
                 <h3>{userName}</h3>
                 <div id='sendZone'>
-                    <textarea id='msg' value={msg} onChange={(e) => setMsg(e.target.value)}
-                        onKeyDown={handleKeyDown}></textarea>
-                    <input type='button' value='전송' id='btnSend' onClick={handleSend} />
+                    <textarea
+                        id='msg'
+                        value={msg}
+                        onChange={(e) => setMsg(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    ></textarea>
+
+                    <button type='button' id='btnSend' onClick={handleSend}>전송</button>
                 </div>
             </div>
         </div>

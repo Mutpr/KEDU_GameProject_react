@@ -5,7 +5,7 @@ import App from './App';
 import Messenger from './component/messenger/messenger';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Routes, Route, Router} from 'react-router-dom';
-import LoginForm from './component/user/login'
+import LoginForm from './component/user/login/login'
 import { WebSocketProvider } from './WebSocketContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
