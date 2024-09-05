@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 
 function App() {
-  const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
+  const navigate = useNavigate(); // Get the navigate function from useNavigate hook
 
+  // Handler for navigating to the messenger route
   const handleMessenger = () => {
-    navigate('/messenger'); // 이벤트 핸들러 내에서 navigate 사용
+    navigate('/messenger'); // Navigate to the /messenger route
   };
   
-  const handleLogin = () =>{
-    navigate('/login');
+  // Handler for navigating to the login route
+  const handleLogin = () => {
+    navigate('/login'); // Navigate to the /login route
   }
 
+  // Render two buttons for navigation
   return (
     <div>
       <button onClick={handleMessenger}>메신저</button><br></br>
