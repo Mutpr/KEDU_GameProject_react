@@ -1,63 +1,55 @@
-import React, { createContext, useContext, useRef, useState } from 'react';
+// WebSocketContext.js
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 
-
-const WebSocketContext = createContext({ 
-    connectWebSocket: () => {} // Provide a default implementation
-    ,sendMessage: () => {},
-    messages: [],  // Initialize as an empty array
-    isConnected: false
-});
+const WebSocketContext = createContext(null);
 
 export const useWebSocket = () => useContext(WebSocketContext);
 
-
 export const WebSocketProvider = ({ children }) => {
-    const [status, setStatus] = useState('disconnected');
-    const [error, setError] = useState('');
-    const ws = useRef(null);
     const [messages, setMessages] = useState([]);
-    
+    const [isConnected, setIsConnected] = useState(false);
+    const socketRef = useRef(null);
+
+    useEffect(() => {
+        socketRef.current = new WebSocket('ws://192.168.1.238:80/socket/chat');
+
+        socketRef.current.onopen = () => {
+            setIsConnected(true);
+            console.log("WebSocket is opened");
+        };
+
+        socketRef.current.onmessage = (event) => {
+            const newMessage = event.data
+            console.log(JSON.parse(newMessage))
+            setMessages(prevMessages => [...prevMessages, JSON.parse(newMessage)]);
+        };
+
+        socketRef.current.onerror = error => {
+            console.error("WebSocket Error:", error);
+        };
+
+        socketRef.current.onclose = () => {
+            setIsConnected(false);
+        };
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.close();
+            }
+        };
+    }, []);
+
     const sendMessage = (message) => {
-        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            ws.current.send(message);
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+            socketRef.current.send(message)
         } else {
             console.error("WebSocket is not connected.");
         }
     };
-    
-
-    const connectWebSocket = (url) => {
-        console.log("url::"+url);
-        // Close any existing connection
-        if (ws.current) {
-            ws.current.close();
-        }
-        ws.current = new WebSocket(url);
-        ws.current.onopen = () => {
-            console.log("WebSocket connection established");
-            setStatus('connected');
-            setError(''); // Clear any previous errors on successful connection
-        };
-        ws.current.onmessage = (event) => {
-            console.log("Message from server:", event.data);
-            const newMessage = JSON.parse(event.data); // Assuming server sends JSON
-            setMessages(prevMessages => [...prevMessages, newMessage]);
-        };
-        ws.current.onclose = () => {
-            console.log("WebSocket connection closed");
-            setStatus('disconnected');
-        };
-        ws.current.onerror = (errorEvent) => {
-            console.error("WebSocket error:", errorEvent);
-            setError('WebSocket connection error');
-            setStatus('error');
-        };
-    };
 
     return (
-        <WebSocketContext.Provider value={{ connectWebSocket, sendMessage, messages: messages, isConnected: status === 'connected' }}>
+        <WebSocketContext.Provider value={{ sendMessage, messages, isConnected }}>
             {children}
         </WebSocketContext.Provider>
     );
-    
 };

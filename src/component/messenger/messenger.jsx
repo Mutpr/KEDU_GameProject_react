@@ -1,65 +1,63 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useWebSocket } from "../../WebSocketContext";
+import { useWebSocket, WebSocketProvider } from "../../WebSocketContext";
 
 function Messenger() {
     const navigate = useNavigate();
     const { userName } = useParams();
-    const { sendMessage } = useWebSocket(); // Provider 인자 제거
-
-    const [message, setMessage] = useState([]);
+    const { sendMessage, messages=[], isConnected } = useWebSocket();
     const [msg, setMsg] = useState("");
+    const messageInputRef = useRef(null);
 
+    // 로그인 되어 있지 않은 경우 메인 페이지로 리다이렉트
     useEffect(() => {
         if (!userName) {
             alert('로그인 해주세요.');
             navigate('/');
         }
-    }, [userName, navigate]);  // Dependency 추가
+    }, [userName, navigate]);
 
-    const handleSend = useCallback(() => {
-        if (msg.trim() !== '') {  // 사용자 입력이 비어있지 않은 경우만 처리
-            const data = {
-                name: userName,
-                message: msg,
-                date: new Date().toLocaleString()
-            };
-            sendMessage(JSON.stringify(data));  // 메시지 전송
-            console.log("Sent data:", data);  // 콘솔 로그 간소화
-            setMessage(prevMessages => [...prevMessages, data]);  // 메시지 배열 업데이트
-            setMsg("");  // 입력 필드 초기화
+    const handleMessage = useCallback((e) => {
+        if (e) e.preventDefault();
+        if (msg.trim() !== '') {
+            try {
+                const data = { name: userName, msg, date: new Date().toLocaleString() };
+                console.log("data:::: "+data)
+                console.log(data)
+                sendMessage(JSON.stringify(data));
+                setMsg("");
+                messageInputRef.current.focus();
+            } catch (error) {
+                console.error("Failed to send message:", error);
+            }
         }
-    }, [msg, userName, setMessage, sendMessage]); // 의존성 배열에 sendMessage 추가
+    }, [msg, sendMessage, userName]);
+    
 
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            handleSend();
-        }
-    };
+    // const handleKeyDown = (e) => {
+    //     if (e.key === 'Enter' && !e.shiftKey) {
+    //         e.preventDefault(); // Shift + Enter가 아닌 경우 기본 이벤트 방지
+    //         handleSend();
+    //     }
+    // };
 
     return (
         <div id="chat-wrap">
             <div id='chatt'>
                 <h1 id="title">WebSocket Chatting</h1>
                 <div id='talk'>
-                    {message.map((item, idx) => (
-                        <div key={idx} className={item.name === userName ? 'me' : 'other'}>
-                            <span><b>{item.name}</b></span> [ {item.date} ]<br />
-                            <span>{item.message}</span>
+                    {messages.map((item, idx) => (
+                        <div key={item.id || idx}>  {/* 고유 ID가 없으면 인덱스 사용 */}
+                            <b>{item.name}</b> [ {item.date} ]<br />
+                            <span>{item.msg}</span>
                         </div>
                     ))}
                 </div>
                 <h3>{userName}</h3>
                 <div id='sendZone'>
-                    <textarea
-                        id='msg'
-                        value={msg}
-                        onChange={(e) => setMsg(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                    ></textarea>
-
-                    <button type='button' id='btnSend' onClick={handleSend}>전송</button>
+                    <textarea id='msg' value={msg} onChange={(e) => setMsg(e.target.value)}
+                         ref={messageInputRef}></textarea>
+                    <input type='button' value='전송' id='btnSend' onClick={handleMessage} />
                 </div>
             </div>
         </div>
