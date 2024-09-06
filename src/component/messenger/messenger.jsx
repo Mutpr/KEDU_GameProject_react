@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { WebSocketProvider } from "../../WebSocketContext";
+import { useWebSocket, WebSocketProvider } from "../../WebSocketContext";
 
 function Messenger() {
     const navigate = useNavigate();
     const { userName } = useParams();
-    const { sendMessage, messages=[], isConnected } = WebSocketProvider([]);
+    const { sendMessage, messages=[], isConnected } = useWebSocket();
     const [msg, setMsg] = useState("");
     const messageInputRef = useRef(null);
 
@@ -24,9 +24,9 @@ function Messenger() {
                 const data = { name: userName, msg, date: new Date().toLocaleString() };
                 console.log("data:::: "+data)
                 console.log(data)
-                // sendMessage(JSON.stringify(data));
-                // setMsg("");
-                // messageInputRef.current.focus();
+                sendMessage(JSON.stringify(data));
+                setMsg("");
+                messageInputRef.current.focus();
             } catch (error) {
                 console.error("Failed to send message:", error);
             }

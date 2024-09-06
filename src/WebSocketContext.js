@@ -20,8 +20,8 @@ export const WebSocketProvider = ({ children }) => {
 
         socketRef.current.onmessage = (event) => {
             const newMessage = event.data
-            console.log(newMessage)
-            setMessages(prevMessages => [...prevMessages, newMessage]);
+            console.log(JSON.parse(newMessage))
+            setMessages(prevMessages => [...prevMessages, JSON.parse(newMessage)]);
         };
 
         socketRef.current.onerror = error => {
@@ -41,7 +41,7 @@ export const WebSocketProvider = ({ children }) => {
 
     const sendMessage = (message) => {
         if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-            console.log(message)
+            socketRef.current.send(message)
         } else {
             console.error("WebSocket is not connected.");
         }
