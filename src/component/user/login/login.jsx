@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { UseWebSocket } from "../../WebSocketContext"
+import { UseWebSocket } from "../../../WebSocketContext"
 
 function Login() {
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
