@@ -9,12 +9,10 @@ function Login() {
     const [userPassword, setUserPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        // 로그인 후 메신저 페이지로 이동
-        if (isLoggedIn) {
-            navigate(`/messenger/${userId}`);
-        }
-    }, [isLoggedIn, navigate, userId]);
+    const handleMessenger=()=>{
+        
+        navigate(`/messenger/${userId}`);
+    }
 
     const handleLogin = async () => {
         try {
@@ -29,9 +27,14 @@ function Login() {
         }
     };
 
+    const getStoredUserDate = () =>{
+        const storedData = sessionStorage.getItem('login');
+        return storedData ? JSON.parse(storedData) : null;
+    }
+
     return (
         <div>
-            {!isLoggedIn ? (
+            {!isLoggedIn && !sessionStorage.getItem('login') ? (
                 <fieldset>
                     <legend>Login</legend>
                     <input
@@ -51,7 +54,13 @@ function Login() {
                     <button onClick={handleLogin}>로그인</button>
                 </fieldset>
             ) : (
-                <div>로그인 성공!</div>
+                <div>
+                <fieldset>
+                    <legend>Menu</legend>
+                    {`${getStoredUserDate().user_name}`} 님 안녕하세요!<br></br>
+                    <button onClick={handleMessenger}>메신저</button>
+                </fieldset>
+            </div>
             )}
         </div>
     );
