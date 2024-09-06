@@ -6,16 +6,18 @@ import Messenger from './component/messenger/messenger';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 import LoginForm from './component/user/login'
-import {WebSocketProvider } from './WebSocketContext';
+import findFriend from './component/friend/findFriend';
+import { WebSocketProvider } from './WebSocketContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <WebSocketProvider>
       <Routes>
-      <Route path='/' element={<App />}></Route>
-      <Route path='/messenger/:userName' element={<Messenger />}></Route>
+        <Route path='/' element={<App />}></Route>
+        <Route path='/messenger/:userName' element={<Messenger />}></Route>
         <Route path='/login' element={<LoginForm />}></Route>
+        <Route path='/friend/:user_seq' element={<findFriend/>}></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
