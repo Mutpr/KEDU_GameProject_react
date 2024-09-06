@@ -1,26 +1,43 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { UseWebSocket } from "../../WebSocketContext"
 
 function Login() {
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
+
+    const [userData, setUserData] = useState([]);
     const [userId, setUserId] = useState('');
+    const [username, setUsername] = useState(''); 
+    const [userSeq, setUserSeq] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const handleMessenger = () => {
-        // 로그인 후 메신저 페이지로 이동
-        if (isLoggedIn) {
-            navigate(`/messenger/${userId}`);
+    const handleMessenger =(e) => {
+        console.log("isLoggedIn::::: ",isLoggedIn)
+        console.log("userID::::: "+userId)
+        if(isLoggedIn && userId){
+            navigate(`/messenger/${e.target.value}`);
         }
     }
 
-    // 사용자 정보 불러오기
-    const getStoredUserData = () => {
+    const handleFriend =(e) =>{
+        console.log("isLoggedIn::::: ",isLoggedIn)
+        console.log("userID::::: "+userId)
+        if(isLoggedIn && userId){
+            navigate(`/friend/${e.target.value}`)
+        }
+    }
+
+    useEffect(() => {
         const storedData = sessionStorage.getItem('login');
-        return storedData ? JSON.parse(storedData) : null;
-    };
+        if (storedData) {
+            const data = JSON.parse(storedData);
+            setUserData(data);
+            setUserId(data.user_id);
+            setIsLoggedIn(true)
+        }
+    }, []);
 
     const handleLogin = async () => {
         try {
@@ -29,6 +46,8 @@ function Login() {
                     setIsLoggedIn(true); // 로그인 성공 상태 업데이트
                     sessionStorage.setItem('login', JSON.stringify(response.data))
                     console.log('Login successful:', response.data);
+                    setUsername(userData.user_name)
+                    setUserSeq(userData.user_seq)
                 });
         } catch (error) {
             console.error('Login failed:', error);
@@ -60,8 +79,9 @@ function Login() {
                 <div>
                     <fieldset>
                         <legend>Menu</legend>
-                        {getStoredUserData().user_name}님 안녕하세요!<br></br>
-                        <button onClick={handleMessenger}>메신저</button>
+                        {userData.user_name}님 안녕하세요!<br></br>
+                        <button onClick={handleMessenger} value={userId}>메신저</button>
+                        <button onClick={handleFriend} value={userId}>친구</button>
                     </fieldset>
                 </div>
             )}

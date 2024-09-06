@@ -6,7 +6,7 @@ import Messenger from './component/messenger/messenger';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 import LoginForm from './component/user/login'
-import findFriend from './component/friend/findFriend';
+import Friend from './component/friend/friend';
 import { WebSocketProvider } from './WebSocketContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,7 +17,7 @@ root.render(
         <Route path='/' element={<App />}></Route>
         <Route path='/messenger/:userName' element={<Messenger />}></Route>
         <Route path='/login' element={<LoginForm />}></Route>
-        <Route path='/friend/:user_seq' element={<findFriend/>}></Route>
+        <Route path='/friend/:userName' element={<Friend/>}></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
