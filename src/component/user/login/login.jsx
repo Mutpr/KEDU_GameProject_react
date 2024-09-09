@@ -16,6 +16,7 @@ function Login() {
     const handleMessenger =(e) => {
         console.log("isLoggedIn::::: ",isLoggedIn)
         console.log("userID::::: "+userId)
+        console.log(e.target.value)
         if(isLoggedIn && userId){
             navigate(`/messenger/${e.target.value}`);
         }
@@ -23,8 +24,9 @@ function Login() {
 
     const handleFriend =(e) =>{
         console.log("isLoggedIn::::: ",isLoggedIn)
-        console.log("userID::::: "+userId)
-        if(isLoggedIn && userId){
+        console.log("userSeq::::: "+userSeq)
+        console.log(e.target.value)
+        if(isLoggedIn && userSeq){
             navigate(`/friend/${e.target.value}`)
         }
     }
@@ -33,27 +35,34 @@ function Login() {
         const storedData = sessionStorage.getItem('login');
         if (storedData) {
             const data = JSON.parse(storedData);
+            console.log(data)
             setUserData(data);
             setUserId(data.user_id);
+            setUserSeq(data.user_seq);
             setIsLoggedIn(true)
+            console.log(data.user_seq)
         }
     }, []);
-
     const handleLogin = async () => {
         try {
-            const request = await axios.post(`http://192.168.1.238:80/user`, { user_id: userId, user_password: userPassword })
+            const request = await axios.post(`http://192.168.1.238:80/user/login`, { user_id: userId, user_password: userPassword })
                 .then(response => {
                     setIsLoggedIn(true); // 로그인 성공 상태 업데이트
                     sessionStorage.setItem('login', JSON.stringify(response.data))
                     console.log('Login successful:', response.data);
-                    setUsername(userData.user_name)
-                    setUserSeq(userData.user_seq)
+                    setUsername(response.data.user_name)
+                    setUserSeq(response.data.user_seq)
+                    console.log(userData)
                 });
         } catch (error) {
             console.error('Login failed:', error);
         }
     };
 
+    const handleRegister=()=>{
+        navigate('/register')
+    }
+    
     return (
         <div>
             {!isLoggedIn && !sessionStorage.getItem('login') ? (
@@ -74,6 +83,7 @@ function Login() {
                         onChange={e => setUserPassword(e.target.value)}
                     /><br />
                     <button onClick={handleLogin}>로그인</button>
+                    <button onClick={handleRegister}>회원가입</button>
                 </fieldset>
             ) : (
                 <div>
@@ -81,7 +91,7 @@ function Login() {
                         <legend>Menu</legend>
                         {userData.user_name}님 안녕하세요!<br></br>
                         <button onClick={handleMessenger} value={userId}>메신저</button>
-                        <button onClick={handleFriend} value={userId}>친구</button>
+                        <button onClick={handleFriend} value={userSeq}>칭긔!</button>
                     </fieldset>
                 </div>
             )}

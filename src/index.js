@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 import LoginForm from './component/user/login/login'
 import Friend from './component/friend/friend';
 import { WebSocketProvider } from './WebSocketContext';
+import Register from './component/user/register/register';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +18,8 @@ root.render(
         <Route path='/' element={<App />}></Route>
         <Route path='/messenger/:userName' element={<Messenger />}></Route>
         <Route path='/login' element={<LoginForm />}></Route>
-        <Route path='/friend/:userName' element={<Friend/>}></Route>
+        <Route path='/friend/:userSeq' element={<Friend/>}></Route>
+        <Route path='/register' element={<Register/>}></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
