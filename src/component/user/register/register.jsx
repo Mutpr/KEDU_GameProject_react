@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 function Register() {
+
+    const Server_IP = process.env.REACT_APP_Server_IP;
+
     const [registerId, setRegisterId] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerUserName, setRegisterUserName] = useState('');
@@ -8,7 +11,7 @@ function Register() {
 
     const handleRegister = async () => {
         try {
-            const request = await axios.post('http://192.168.1.238:80/user/register', {
+            const request = await axios.post(`${Server_IP}/user/register`, {
                 user_id: registerId,
                 user_password: registerPassword,
                 user_name:registerUserName,

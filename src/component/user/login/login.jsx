@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { UseWebSocket } from "../../../WebSocketContext"
 
 function Login() {
+
+    const Server_IP = process.env.REACT_APP_Server_IP;
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
 
     const [userData, setUserData] = useState([]);
@@ -18,7 +20,7 @@ function Login() {
         console.log("userID::::: "+userId)
         console.log(e.target.value)
         if(isLoggedIn && userId){
-            navigate(`/messenger/${e.target.value}`);
+            navigate(`/messengerList/${e.target.value}`);
         }
     }
 
@@ -90,7 +92,7 @@ function Login() {
                     <fieldset>
                         <legend>Menu</legend>
                         {userData.user_name}님 안녕하세요!<br></br>
-                        <button onClick={handleMessenger} value={userId}>메신저</button>
+                        <button onClick={handleMessenger} value={userSeq}>메신저</button>
                         <button onClick={handleFriend} value={userSeq}>칭긔!</button>
                     </fieldset>
                 </div>

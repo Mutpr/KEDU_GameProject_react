@@ -20,6 +20,7 @@ root.render(
         <Route path='/login' element={<LoginForm />}></Route>
         <Route path='/friend/:userSeq' element={<Friend/>}></Route>
         <Route path='/register' element={<Register/>}></Route>
+        <Route path="/messengerList/:userSeq"></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
