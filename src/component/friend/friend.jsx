@@ -10,7 +10,8 @@ import Card from 'react-bootstrap/Card';
 import FriendRequest from "./friendRequest";
 import FriendReceivedRequest from "./friendReceivedRequest";
 import { DATA } from './MAIN_DATA';
-
+import { Cookies } from "react-cookie";
+import Swal from 'sweetalert2'
 
 function Friend() {
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
@@ -30,6 +31,8 @@ function Friend() {
     const stringifiedSeq = JSON.stringify(userSeq);
     const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
 
+    const [requestResult, setRequestResult] = useState('');
+
     const selectComponent = {
         first: <FriendRequest />,
         second: <FriendReceivedRequest />
@@ -47,7 +50,30 @@ function Friend() {
     }
 
     const handleFriendAdd = (e) => {
-        axios.post('http://172.30.1.87:80/friend/addFriend', { params: { "friend_request_owner_seq": e.target.value, "friend_request_sender_seq": parsedSeq } })
+        // console.log(e.target.value)
+        axios.post('http://172.30.1.87:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+            (response)=>{
+                console.log(response.data);
+                setRequestResult(response.data)
+                if(response.data === '친구 요청을 전송하는데 성공했습니다'){
+                    Swal.fire({
+                        text: response.data,
+                        icon: "success"
+                      });
+                }else if(response.data === '친구 요청을 전송하는데 실패했습니다.'){
+                    Swal.fire({
+                        icon: "error",
+                        title: response.data,
+                      });
+
+                }else if(response.data === '이미 친구 요청을 보낸 유저입니다.'){
+                    Swal.fire({
+                        icon: "error",
+                        title: response.data,
+                      });
+                }
+            }
+        )
     }
 
     const handleClickButton = (e) => {
@@ -98,6 +124,7 @@ function Friend() {
                         <div className="m-2" key={user.id || idx}>
                             {user.user_name} ({user.user_tag_id})
                             <Button onClick={handleFriendAdd} value={user.user_seq}> 친구 추가 </Button>
+
                         </div>
                     ))}
 
