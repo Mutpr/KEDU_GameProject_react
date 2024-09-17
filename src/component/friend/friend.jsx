@@ -7,22 +7,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
+import FriendRequest from "./friendRequest";
+import FriendReceivedRequest from "./friendReceivedRequest";
+import { DATA } from './MAIN_DATA';
 
-function TextExample() {
-    return (
-        <Card style={{ width: '100%' }}>
-            <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                <Card.Text>
 
-                </Card.Text>
-                <Card.Link href="#">Card Link</Card.Link>
-                <Card.Link href="#">Another Link</Card.Link>
-            </Card.Body>
-        </Card>
-    );
-}
 function Friend() {
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
 
@@ -30,7 +19,8 @@ function Friend() {
     const [showModal, setShowModal] = useState(false);
     const [userList, setUserList] = useState([]);
     const userSeq = useParams();
-    const [seq, setSeq] = useState('');
+    const [content, setContent] = useState();
+
 
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
@@ -40,9 +30,13 @@ function Friend() {
     const stringifiedSeq = JSON.stringify(userSeq);
     const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
 
+    const selectComponent = {
+        first: <FriendRequest />,
+        second: <FriendReceivedRequest />
+    }
     const handleSearch = () => {
         console.log(parsedSeq);
-        axios.get('http://192.168.1.238:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
+        axios.get('http://172.30.1.87:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
             .then((response) => {
                 console.log(response.data)
                 // 예를 들어 응답이 사용자 객체의 배열이라고 가정
@@ -53,26 +47,35 @@ function Friend() {
     }
 
     const handleFriendAdd = (e) => {
-        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": e.target.value, "friend_request_sender_seq": parsedSeq } })
+        axios.post('http://172.30.1.87:80/friend/addFriend', { params: { "friend_request_owner_seq": e.target.value, "friend_request_sender_seq": parsedSeq } })
     }
 
-    const handleFriendRequest = () => (
-        setIsFriendExist(true)
-    );
+    const handleClickButton = (e) => {
+        const { name } = e.target;
+        setContent(name);
+    };
+
     return (
         <fieldset>
-            <legend>친구창</legend>
+            <h1>친구창</h1>
+
             {isFriendExist ? (
                 <div>
                     <div>보낸 친구 요청 만들 부분</div>
-                    <button onClick={handleShow}>친구 추가</button>
+                    <br></br>
+                    <Button className="m-1" onClick={handleShow}>친구 추가</Button>
                 </div>
             ) : (
                 <div>
-                    추가된 친구가 없습니다.
-                    <button onClick={handleShow}>친구 추가</button>
-                    <button onClick={handleFriendRequest}>친구 요청 목록</button>
-
+                    <Button className="m-1" onClick={handleShow}>친구 추가</Button>
+                    {
+                            DATA.map(data => (
+                                <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
+                                    {data.text}
+                                </Button>
+                            ))
+                    }
+                    {selectComponent[content]}
                 </div>
             )}
             <Modal show={showModal} onHide={handleClose} backdrop="static" keyboard={false} centered>

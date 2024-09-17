@@ -9,6 +9,7 @@ import LoginForm from './component/user/login/login'
 import Friend from './component/friend/friend';
 import { WebSocketProvider } from './WebSocketContext';
 import Register from './component/user/register/register';
+import FriendRequest from './component/friend/friendRequest';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,6 +20,7 @@ root.render(
         <Route path='/messenger/:userName' element={<Messenger />}></Route>
         <Route path='/login' element={<LoginForm />}></Route>
         <Route path='/friend/:userSeq' element={<Friend/>}></Route>
+        <Route path="/friendRequest/:userSeq" element={<FriendRequest/>}></Route>
         <Route path='/register' element={<Register/>}></Route>
         <Route path="/messengerList/:userSeq"></Route>
       </Routes>
