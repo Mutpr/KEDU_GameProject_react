@@ -47,7 +47,7 @@ function Login() {
     }, []);
     const handleLogin = async () => {
         try {
-            const request = await axios.post(`http://172.30.1.87:80/user/login`, { user_id: userId, user_password: userPassword })
+            const request = await axios.post(`http://192.168.1.238:80/user/login`, { user_id: userId, user_password: userPassword })
                 .then(response => {
                     setIsLoggedIn(true); // 로그인 성공 상태 업데이트
                     sessionStorage.setItem('login', JSON.stringify(response.data))

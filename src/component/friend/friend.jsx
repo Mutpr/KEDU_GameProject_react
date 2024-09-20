@@ -33,13 +33,17 @@ function Friend() {
 
     const [requestResult, setRequestResult] = useState('');
 
+
+    useEffect(() => {
+        axios.get(`http://192.168.1.238:80/friend/${parsedSeq}`);
+    }, []);
     const selectComponent = {
         first: <FriendRequest />,
         second: <FriendReceivedRequest />
     }
     const handleSearch = () => {
         console.log(parsedSeq);
-        axios.get('http://172.30.1.87:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
+        axios.get('http://192.168.0.100:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
             .then((response) => {
                 console.log(response.data)
                 // 예를 들어 응답이 사용자 객체의 배열이라고 가정
@@ -51,7 +55,7 @@ function Friend() {
 
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
-        axios.post('http://172.30.1.87:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+        axios.post('http://192.168.0.100:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
             (response)=>{
                 console.log(response.data);
                 setRequestResult(response.data)

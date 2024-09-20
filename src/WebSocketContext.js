@@ -11,7 +11,7 @@ export const WebSocketProvider = ({ children }) => {
     const socketRef = useRef(null);
 
     useEffect(() => {
-        socketRef.current = new WebSocket('ws://172.30.1.87:80/socket/chat');
+        socketRef.current = new WebSocket('ws://192.168.1.238:80/socket/chat');
 
         socketRef.current.onopen = () => {
             setIsConnected(true);

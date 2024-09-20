@@ -10,7 +10,7 @@ function FriendRequest() {
 
 
     useEffect(() => {
-        axios.get('http://172.30.1.87:80/friend/findRequest', { params: { "user_seq": parsedSeq } }).then(
+        axios.get('http://192.168.1.238:80/friend/findRequest', { params: { "user_seq": parsedSeq } }).then(
             (response) => {
                 setRequestList(response.data);
             }
