@@ -32,10 +32,15 @@ function Friend() {
     const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
 
     const [requestResult, setRequestResult] = useState('');
-
+    const [friendList, setFriendList] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://192.168.1.238:80/friend/${parsedSeq}`);
+        axios.get(`http://192.168.1.238:80/friend/${parsedSeq}`).then(
+            (response) => {
+                console.log(response.data)
+                setFriendList(response.data);
+            }
+        )
     }, []);
     const selectComponent = {
         first: <FriendRequest />,
@@ -43,7 +48,7 @@ function Friend() {
     }
     const handleSearch = () => {
         console.log(parsedSeq);
-        axios.get('http://192.168.0.100:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
+        axios.get('http://192.168.1.238:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
             .then((response) => {
                 console.log(response.data)
                 // 예를 들어 응답이 사용자 객체의 배열이라고 가정
@@ -56,25 +61,25 @@ function Friend() {
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
         axios.post('http://192.168.0.100:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
-            (response)=>{
+            (response) => {
                 console.log(response.data);
                 setRequestResult(response.data)
-                if(response.data === '친구 요청을 전송하는데 성공했습니다'){
+                if (response.data === '친구 요청을 전송하는데 성공했습니다') {
                     Swal.fire({
                         text: response.data,
                         icon: "success"
-                      });
-                }else if(response.data === '친구 요청을 전송하는데 실패했습니다.'){
+                    });
+                } else if (response.data === '친구 요청을 전송하는데 실패했습니다.') {
                     Swal.fire({
                         icon: "error",
                         title: response.data,
-                      });
+                    });
 
-                }else if(response.data === '이미 친구 요청을 보낸 유저입니다.'){
+                } else if (response.data === '이미 친구 요청을 보낸 유저입니다.') {
                     Swal.fire({
                         icon: "error",
                         title: response.data,
-                      });
+                    });
                 }
             }
         )
@@ -85,25 +90,55 @@ function Friend() {
         setContent(name);
     };
 
+    const handleFriendDelete = (e) => {
+        axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${parsedSeq}`).then(
+            (response)=>{
+                console.log(response.data)
+            }
+        )
+    }
+
     return (
         <fieldset>
             <h1>친구창</h1>
 
             {isFriendExist ? (
                 <div>
-                    <div>보낸 친구 요청 만들 부분</div>
-                    <br></br>
                     <Button className="m-1" onClick={handleShow}>친구 추가</Button>
+                    {
+                        DATA.map(data => (
+                            <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
+                                {data.text}
+                            </Button>
+                        ))
+                    }
+                    <h4>친구 목록</h4>
+                    {friendList.map((item, idx) => (
+                        <div key={idx}><h5>{item.user_name}</h5>
+                            <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                            <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+                        </div>
+                    ))
+                    }
+                    {selectComponent[content]}
                 </div>
             ) : (
                 <div>
                     <Button className="m-1" onClick={handleShow}>친구 추가</Button>
                     {
-                            DATA.map(data => (
-                                <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
-                                    {data.text}
-                                </Button>
-                            ))
+                        DATA.map(data => (
+                            <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
+                                {data.text}
+                            </Button>
+                        ))
+                    }
+                    <h4>친구 목록</h4>
+                    {friendList.map((item, idx) => (
+                        <div key={idx}><h5>{item.user_name}</h5>
+                            <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                            <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+                        </div>
+                    ))
                     }
                     {selectComponent[content]}
                 </div>

@@ -1,4 +1,5 @@
 export const DATA = [
+    
     {
         id:1,
         text:'보낸 친구 요청 확인',
