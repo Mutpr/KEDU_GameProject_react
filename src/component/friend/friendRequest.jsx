@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-function FriendRequest() {
-    const userSeq = useParams();
-    const stringifiedSeq = JSON.stringify(userSeq);
-    const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
+function FriendRequest({userSeq}) {
+    // const userSeq = useParams();
+    // const stringifiedSeq = JSON.stringify(userSeq);
+    // const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
     const [requestList, setRequestList] = useState([]);
 
 
     useEffect(() => {
-        axios.get('http://192.168.1.238:80/friend/findRequest', { params: { "user_seq": parsedSeq } }).then(
+        axios.get('http://172.30.1.15:80/friend/findRequest', { params: { "user_seq": userSeq } }).then(
             (response) => {
                 setRequestList(response.data);
             }
@@ -21,7 +21,7 @@ function FriendRequest() {
 
 
     return (
-        <div>
+        <div >
             {/* {requestList === '' ? <h1>보낸 친구 요청이 없습니다.</h1> :
                 <h1 id="title">보낸 친구 요청</h1>
             {requestList.map((item, idx) => (

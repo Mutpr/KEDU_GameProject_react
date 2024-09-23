@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "bootstrap";
 
-function FriendReceivedRequest() {
+function FriendReceivedRequest({userSeq}) {
     // URL 파라미터에서 userSeq 값을 추출합니다.
-    const userSeq = useParams();
-    const stringifiedSeq = JSON.stringify(userSeq);
-    const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
+    // const userSeq = useParams();
+    // const stringifiedSeq = JSON.stringify(userSeq);
+    // const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
 
     // 받은 친구 요청 목록을 저장할 상태 변수입니다.
     const [receivedRequestList, setReceivedRequestList] = useState([]);
@@ -15,7 +15,7 @@ function FriendReceivedRequest() {
 
     // 컴포넌트가 마운트될 때 받은 요청 목록을 서버로부터 가져옵니다.
     useEffect(() => {
-        axios.get('http://192.168.1.238:80/friend/findReceivedRequest', { params: { "user_seq": parsedSeq } })
+        axios.get('http://172.30.1.15:80/friend/findReceivedRequest', { params: { "user_seq": userSeq } })
             .then(
                 (response) => {
                     console.log(response)
@@ -26,15 +26,15 @@ function FriendReceivedRequest() {
 
     const handleRequestAgree=(e)=>{
         console.log(e.target.value);
-        axios.post('http://192.168.1.238:80/friend/requestAgree', {params:{"owner_seq":e.target.value,"user_seq":parsedSeq}})
+        axios.post('http://172.30.1.15:80/friend/requestAgree', {params:{"owner_seq":e.target.value,"user_seq":userSeq}})
     }
 
     const handleRequestDisagree=(e)=>{
         console.log(e.target.value);
-        axios.post('http://192.168.1.238:80/friend/requestDisagree',  {params:{"owner_seq":e.target.value,"user_seq":parsedSeq}})
+        axios.post('http://172.30.1.15:80/friend/requestDisagree',  {params:{"owner_seq":e.target.value,"user_seq":userSeq}})
     }
     return (
-        <div>
+        <div >
             {/* 페이지 타이틀 */}
             <h4 id="title">받은 친구 요청</h4>
             {/* 받은 요청 목록을 출력합니다. 요청이 없으면 안내 메시지를 표시합니다. */}

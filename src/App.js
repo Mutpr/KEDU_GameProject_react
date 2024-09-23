@@ -1,16 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
 function App() {
-  const navigate = useNavigate(); // Get the navigate function from useNavigate hook
+  const navigate = useNavigate();
 
-  // Handler for navigating to the messenger route
   const handleMessenger = () => {
-    navigate('/messenger'); // Navigate to the /messenger route
+    navigate('/messenger/');
   };
-  
-  // Handler for navigating to the login route
   const handleLogin = () => {
-    navigate('/login'); // Navigate to the /login route
+    navigate('/login');
   }
 
   // Render two buttons for navigation

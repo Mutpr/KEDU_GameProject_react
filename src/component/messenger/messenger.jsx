@@ -5,7 +5,7 @@ import { useWebSocket, WebSocketProvider } from "../../WebSocketContext";
 function Messenger() {
     const navigate = useNavigate();
     const { userName } = useParams();
-    const { sendMessage, messages=[], isConnected } = useWebSocket();
+    const { sendMessage, messages = [], isConnected } = useWebSocket();
     const [msg, setMsg] = useState("");
     const messageInputRef = useRef(null);
 
@@ -17,22 +17,31 @@ function Messenger() {
         }
     }, [userName, navigate]);
 
-    const handleMessage = useCallback((e) => {
+    const handleMessage = useCallback(async (e) => {
         if (e) e.preventDefault();
         if (msg.trim() !== '') {
             try {
                 const data = { name: userName, msg, date: new Date().toLocaleString() };
-                console.log("data:::: "+data)
-                console.log(data)
-                sendMessage(JSON.stringify(data));
+                console.log("data:::: " + data)
+                const response = await fetch('/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                console.log(response)
+                // sendMessage(JSON.stringify(data));
+                // setMsg("");
+                // messageInputRef.current.focus();
+                if (!response.ok) throw new Error('failed to send message');
                 setMsg("");
                 messageInputRef.current.focus();
             } catch (error) {
                 console.error("Failed to send message:", error);
             }
+
         }
     }, [msg, sendMessage, userName]);
-    
+
 
     // const handleKeyDown = (e) => {
     //     if (e.key === 'Enter' && !e.shiftKey) {
@@ -45,6 +54,12 @@ function Messenger() {
         <div id="chat-wrap">
             <div id='chatt'>
                 <h1 id="title">WebSocket Chatting</h1>
+                <h3>{userName}</h3>
+                <div id='sendZone'>
+                    <textarea id='msg' value={msg} onChange={(e) => setMsg(e.target.value)}
+                        ref={messageInputRef}></textarea>
+                    <input type='button' value='전송' id='btnSend' onClick={handleMessage} />
+                </div>
                 <div id='talk'>
                     {messages.map((item, idx) => (
                         <div key={item.id || idx}>  {/* 고유 ID가 없으면 인덱스 사용 */}
@@ -53,12 +68,7 @@ function Messenger() {
                         </div>
                     ))}
                 </div>
-                <h3>{userName}</h3>
-                <div id='sendZone'>
-                    <textarea id='msg' value={msg} onChange={(e) => setMsg(e.target.value)}
-                         ref={messageInputRef}></textarea>
-                    <input type='button' value='전송' id='btnSend' onClick={handleMessage} />
-                </div>
+
             </div>
         </div>
     );

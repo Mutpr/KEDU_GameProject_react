@@ -10,6 +10,8 @@ import Friend from './component/friend/friend';
 import { WebSocketProvider } from './WebSocketContext';
 import Register from './component/user/register/register';
 import FriendRequest from './component/friend/friendRequest';
+import MessengerList from './component/messenger/messengerList';
+import SideBar from './component/sidebar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,7 +24,8 @@ root.render(
         <Route path='/friend/:userSeq' element={<Friend/>}></Route>
         <Route path="/friendRequest/:userSeq" element={<FriendRequest/>}></Route>
         <Route path='/register' element={<Register/>}></Route>
-        <Route path="/messengerList/:userSeq"></Route>
+        <Route path="/messengerList/:roomId/:userSeq" element={<MessengerList/>}></Route>
+        <Route path="/sidebar" element={<SideBar/>}></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
