@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { UseWebSocket } from "../../../WebSocketContext"
-import Roomlist from "../../roomlist";
+
 import style from "../../sidebar.module.css"
 import { Button, Card, Form, InputGroup } from 'react-bootstrap'
 import SideBar from "../../sidebar";
 import Friend from "../../friend/friend";
+import Messenger from "../../messenger/messengerList"
+import GroupMessage from "../../messenger/groupMessenger";
 
-function Login() {
+function Login({chatroomId}) {
     const [showFriend, setShowFriend] = useState(false); // Friend 컴포넌트의 렌더링 여부를 제어할 상태
-
+    const [showMessage, setShowMessage] = useState(true);
     // const Server_IP = process.env.REACT_APP_Server_IP;
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
 
@@ -54,7 +55,7 @@ function Login() {
     }, []);
     const handleLogin = async () => {
         try {
-            const request = await axios.post(`http://172.30.1.15:80/user/login`, { user_id: userId, user_password: userPassword })
+            const request = await axios.post(`http://192.168.1.238:80/user/login`, { user_id: userId, user_password: userPassword })
                 .then(response => {
                     setIsLoggedIn(true); // 로그인 성공 상태 업데이트
                     sessionStorage.setItem('login', JSON.stringify(response.data))
@@ -101,8 +102,7 @@ function Login() {
                 </div>
             ) : (
                 <div>
-                    <SideBar/>
-                    <Roomlist/>
+                    <SideBar userSeq={userSeq}/>
                     <div className={style.mainSection}>
                         <div className={style.cardSection}>
                     <Card className={style.mainCard}>
@@ -112,6 +112,7 @@ function Login() {
                     </div>
                     <div  className="h-100">
                     {showFriend && <Friend userSeq={userSeq} />}
+                    {showMessage && <GroupMessage userSeq={userSeq} chatroomId={chatroomId}/>}
                     </div>
                     </div>
                 </div>

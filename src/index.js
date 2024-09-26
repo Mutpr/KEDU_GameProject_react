@@ -12,6 +12,7 @@ import Register from './component/user/register/register';
 import FriendRequest from './component/friend/friendRequest';
 import MessengerList from './component/messenger/messengerList';
 import SideBar from './component/sidebar';
+import GroupMessage from './component/messenger/groupMessenger'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
         <Route path='/register' element={<Register/>}></Route>
         <Route path="/messengerList/:roomId/:userSeq" element={<MessengerList/>}></Route>
         <Route path="/sidebar" element={<SideBar/>}></Route>
+        <Route path="/groupMessenger/:chatroomId" element={<GroupMessage/>}></Route>
       </Routes>
     </WebSocketProvider>
   </BrowserRouter>
