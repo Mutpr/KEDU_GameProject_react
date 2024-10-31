@@ -61,7 +61,11 @@ function Friend({userSeq}) {
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         axios.post('http://192.168.0.18:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
+=======
+        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+>>>>>>> Stashed changes
 =======
         axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
 >>>>>>> Stashed changes
@@ -97,8 +101,11 @@ function Friend({userSeq}) {
 
     const handleFriendDelete = (e) => {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         axios.post(`http://192.168.0.18:80/friend/delete/${e.target.value}/${userSeq}`).then(
 =======
+=======
+>>>>>>> Stashed changes
 
         //alert 띄울것
         axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${parsedSeq}`).then(
