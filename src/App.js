@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useNavigate } from 'react-router-dom';
+import { ChatRoomProvider } from './component/messenger/groupMessengerContext';
 
 function App() {
+  // const ChatRoomContext = createContext({ chatRoomId: null, setChatRoomId: undefined });
+  const navigate = useNavigate();
+
+  const handleMessenger = () => {
+    navigate('/messenger/');
+  };
+  const handleLogin = () => {
+    navigate('/login');
+  }
+
+  // Render two buttons for navigation
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={handleMessenger}>메신저</button><br></br>
+      <button onClick={handleLogin}>로그인</button>
     </div>
   );
+}
+
+const root = () =>{
+  <ChatRoomProvider>
+    <App />
+  </ChatRoomProvider>
 }
 
 export default App;
