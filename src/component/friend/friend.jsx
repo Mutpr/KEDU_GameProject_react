@@ -14,7 +14,7 @@ import { Cookies } from "react-cookie";
 import Swal from 'sweetalert2'
 import FriendList from "./friendList";
 
-function Friend({userSeq}) {
+function Friend({ userSeq }) {
     console.log(userSeq);
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
 
@@ -42,9 +42,9 @@ function Friend({userSeq}) {
         )
     }, []);
     const selectComponent = {
-        first: <FriendRequest userSeq={userSeq}/>,
+        first: <FriendRequest userSeq={userSeq} />,
         second: <FriendReceivedRequest userSeq={userSeq} />,
-        third: <FriendList userSeq={userSeq}/>
+        third: <FriendList userSeq={userSeq} />
     }
     const handleSearch = () => {
         // console.log(parsedSeq);
@@ -60,15 +60,7 @@ function Friend({userSeq}) {
 
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         axios.post('http://192.168.0.18:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
-=======
-        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
->>>>>>> Stashed changes
-=======
-        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
->>>>>>> Stashed changes
             (response) => {
                 console.log(response.data);
                 setRequestResult(response.data)
@@ -76,7 +68,7 @@ function Friend({userSeq}) {
                     Swal.fire({
                         icon: "success",
                         text: response.data,
-                        
+
                     });
                 } else if (response.data === '친구 요청을 전송하는데 실패했습니다.') {
                     Swal.fire({
@@ -100,109 +92,101 @@ function Friend({userSeq}) {
     };
 
     const handleFriendDelete = (e) => {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        axios.post(`http://192.168.0.18:80/friend/delete/${e.target.value}/${userSeq}`).then(
-=======
-=======
->>>>>>> Stashed changes
-
         //alert 띄울것
-        axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${parsedSeq}`).then(
->>>>>>> Stashed changes
-            (response)=>{
+        axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${userSeq}`).then(
+            (response) => {
                 console.log(response.data)
             }
         )
     }
 
-    const handleChat=(e)=>{
+    const handleChat = (e) => {
         navigate(`/messengerList/${e.target.value}/${userSeq}`)
     }
 
     return (
-        <div className="h-100" style={{marginTop:"70px", marginBottom:"53px", marginLeft:"50px"}}>
-        <fieldset className="h-100">
+        <div className="h-100" style={{ marginTop: "70px", marginBottom: "53px", marginLeft: "50px" }}>
+            <fieldset className="h-100">
 
-            {isFriendExist ? (
-                <div className="h-100">
-                    <Button className="m-1" onClick={handleShow}>친구 추가</Button>
-                    {
-                        DATA.map(data => (
-                            <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
-                                {data.text}
-                            </Button>
+                {isFriendExist ? (
+                    <div className="h-100">
+                        <Button className="m-1" onClick={handleShow}>친구 추가</Button>
+                        {
+                            DATA.map(data => (
+                                <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
+                                    {data.text}
+                                </Button>
+                            ))
+                        }
+                        <h3>친구 목록</h3>
+                        {friendList.map((item, idx) => (
+                            <div key={idx}><h5>{item.user_name}</h5>
+                                <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                                <button onClick={handleChat} value={item.user_seq}> 채팅</button>
+                                <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+
+                            </div>
                         ))
-                    }
-                    <h3>친구 목록</h3>
-                    {friendList.map((item, idx) => (
-                        <div key={idx}><h5>{item.user_name}</h5>
-                            <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
-                            <button onClick={handleChat} value={item.user_seq}> 채팅</button>
-                            <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
-                            
-                        </div>
-                    ))
-                    }
-                    {selectComponent[content]}
-                </div>
-            ) : (
-                <div className="h-100">
-                    <Button className="m-1" onClick={handleShow}>친구 추가</Button>
-                    {
-                        DATA.map(data => (
-                            <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
-                                {data.text}
-                            </Button>
+                        }
+                        {selectComponent[content]}
+                    </div>
+                ) : (
+                    <div className="h-100">
+                        <Button className="m-1" onClick={handleShow}>친구 추가</Button>
+                        {
+                            DATA.map(data => (
+                                <Button className="m-1" onClick={handleClickButton} name={data.name} key={data.id}>
+                                    {data.text}
+                                </Button>
+                            ))
+                        }
+                        <h3>친구 목록</h3>
+                        {friendList.map((item, idx) => (
+                            <div key={idx}><h5>{item.user_name}</h5>
+                                <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                                <button onClick={handleChat} value={item.user_seq}> 채팅</button>
+                                <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+                            </div>
                         ))
-                    }
-                    <h3>친구 목록</h3>
-                    {friendList.map((item, idx) => (
-                        <div key={idx}><h5>{item.user_name}</h5>
-                            <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
-                            <button onClick={handleChat} value={item.user_seq}> 채팅</button>
-                            <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
-                        </div>
-                    ))
-                    }
-                    {selectComponent[content]}
-                </div>
-            )}
-            <Modal show={showModal} onHide={handleClose} backdrop="static" keyboard={false} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>친구 검색</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <InputGroup size="lg">
-                        <Form.Control
-                            aria-label="Large"
-                            aria-describedby="inputGroup-sizing-sm"
-                            placeholder="찾을 유저의 태그 아이디를 입력하세요."
-                            value={searchKeyword}
-                            onChange={(e) => setSearchKeyword(e.target.value)}
-                        />
-                        <Button variant="primary" onClick={handleSearch}>검색</Button>
-                    </InputGroup>
+                        }
+                        {selectComponent[content]}
+                    </div>
+                )}
+                <Modal show={showModal} onHide={handleClose} backdrop="static" keyboard={false} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>친구 검색</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <InputGroup size="lg">
+                            <Form.Control
+                                aria-label="Large"
+                                aria-describedby="inputGroup-sizing-sm"
+                                placeholder="찾을 유저의 태그 아이디를 입력하세요."
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                            />
+                            <Button variant="primary" onClick={handleSearch}>검색</Button>
+                        </InputGroup>
 
-                    {userList.map((user, idx) => (
-                        <div className="m-2" key={user.id || idx}>
-                            {user.user_name} ({user.user_tag_id})
-                            <Button onClick={handleFriendAdd} value={user.user_seq}> 친구 추가 </Button>
+                        {userList.map((user, idx) => (
+                            <div className="m-2" key={user.id || idx}>
+                                {user.user_name} ({user.user_tag_id})
+                                <Button onClick={handleFriendAdd} value={user.user_seq}> 친구 추가 </Button>
 
-                        </div>
-                    ))}
+                            </div>
+                        ))}
 
-                    {/* // <div className="m-2" key={user.id || idx}>
+                        {/* // <div className="m-2" key={user.id || idx}>
                         //     {user.user_name} ({user.user_tag_id})
                         //     <Button onClick={handleFriendAdd} value={user.user_seq}> 친구 추가 </Button>
                         // </div>
                     ))} */}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>닫기</Button>
-                </Modal.Footer>
-            </Modal>
-        </fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>닫기</Button>
+                    </Modal.Footer>
+                </Modal>
+            </fieldset>
         </div>
     );
 }
