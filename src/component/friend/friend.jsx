@@ -60,14 +60,19 @@ function Friend({userSeq}) {
 
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
+<<<<<<< Updated upstream
         axios.post('http://192.168.0.18:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
+=======
+        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+>>>>>>> Stashed changes
             (response) => {
                 console.log(response.data);
                 setRequestResult(response.data)
                 if (response.data === '친구 요청을 전송하는데 성공했습니다') {
                     Swal.fire({
+                        icon: "success",
                         text: response.data,
-                        icon: "success"
+                        
                     });
                 } else if (response.data === '친구 요청을 전송하는데 실패했습니다.') {
                     Swal.fire({
@@ -91,7 +96,13 @@ function Friend({userSeq}) {
     };
 
     const handleFriendDelete = (e) => {
+<<<<<<< Updated upstream
         axios.post(`http://192.168.0.18:80/friend/delete/${e.target.value}/${userSeq}`).then(
+=======
+
+        //alert 띄울것
+        axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${parsedSeq}`).then(
+>>>>>>> Stashed changes
             (response)=>{
                 console.log(response.data)
             }
@@ -122,6 +133,7 @@ function Friend({userSeq}) {
                             <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
                             <button onClick={handleChat} value={item.user_seq}> 채팅</button>
                             <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+                            
                         </div>
                     ))
                     }
