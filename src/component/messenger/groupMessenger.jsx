@@ -20,24 +20,23 @@ function GroupMessage({ userSeq, chatroomId }) {
 
     // 서버에서 그룹 메시지를 가져오는 함수
     const fetchMessage = async () => {
-        setRoomId("chatRoomId::: "+chatroomId)
-        console.log(roomId)
+        // roomId를 바로 queryParams에 사용
         const queryParams = new URLSearchParams({ roomId: chatroomId });
         const url = `http://192.168.0.18:9998/getGroupMessage?${queryParams}`;
         try {
             const response = await fetch(url);
-            console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            const data = await response.json();
-
+            const data = await response.json(); 
             setMessage(data);
             setRoomId(chatroomId);
+            
         } catch (error) {
-            console.log(error, 'error occurred');
+            console.error('Error occurred:', error);
         }
     };
+    
 
     const data = {
         name: userSeq,
@@ -54,7 +53,7 @@ function GroupMessage({ userSeq, chatroomId }) {
     //     const url = `http://192.168.0.4:9998/getGroupMessage?${queryParams}`;
     //     try{
     //         const response = await fetch(url);
-    //         console.log(response.data)
+    //         console.log("response:::"+response)
     //     }catch(err){
     //         console.log(err)
     //     }
@@ -191,9 +190,8 @@ function GroupMessage({ userSeq, chatroomId }) {
                 {message.map((item, idx) => (
                     <div key={idx}>
                         <b>{item.name}</b> [ {new Date(item.date).toLocaleString()}]: <br />
-                        <h6>{item.msg}</h6>
                         {item.fileName == null && (
-                            <div>{item.msg}</div>
+                            <div><h5>{item.msg}</h5></div>
                         )}
                         {item.fileName && (
                             <Button variant="success" onClick={() => handleDownload(item.fileName)}>
