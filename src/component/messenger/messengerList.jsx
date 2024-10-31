@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWebSocket } from "../../WebSocketContext";
+import { Button } from "bootstrap";
 
 function Messenger({chatRoomId}) {
     console.log("chatroomId:: "+chatRoomId)
@@ -19,7 +20,7 @@ function Messenger({chatRoomId}) {
 
     const fetchData = async () => {
         const queryParams = new URLSearchParams({userName:userSeq, receiver:roomId}).toString();
-        const url = `http://192.168.1.238:9999/getRoomMessage?${queryParams}`;
+        const url = `http://192.168.0.18:9999/getRoomMessage?${queryParams}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -40,7 +41,7 @@ function Messenger({chatRoomId}) {
         if (msg.trim() === '') return;
         const data = { name: userSeq, msg, date: new Date().toISOString(), receiver: roomId };
         try {
-            const response = await fetch('http://192.168.1.238:9999/message', {
+            const response = await fetch('http://192.168.0.18:9999/message', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -59,6 +60,7 @@ function Messenger({chatRoomId}) {
     }, [msg, userSeq, roomId]);
 
     return (
+        <div>
         <div id="chat-wrap">
             <h1>WebSocket Chatting</h1>
             <div id='sendZone'>
@@ -72,6 +74,7 @@ function Messenger({chatRoomId}) {
                     </div>
                 ))}
             </div>
+        </div>
         </div>
     );
 }

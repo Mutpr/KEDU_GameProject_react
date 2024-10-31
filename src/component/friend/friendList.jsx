@@ -3,7 +3,7 @@ import axios from "axios";
 function FriendList({userSeq}){
     const [friendList, setFriendList] = useState([]);
     useEffect(() => {
-        axios.get(`http://192.168.1.238:80/friend/${userSeq}`).then(
+        axios.get(`http://192.168.0.18:80/friend/${userSeq}`).then(
             (response) => {
                 console.log(response.data)
                 setFriendList(response.data);

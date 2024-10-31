@@ -34,7 +34,7 @@ function Friend({userSeq}) {
     const [friendList, setFriendList] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://192.168.1.238:80/friend/${userSeq}`).then(
+        axios.get(`http://192.168.0.18:80/friend/${userSeq}`).then(
             (response) => {
                 console.log(response.data)
                 setFriendList(response.data);
@@ -48,7 +48,7 @@ function Friend({userSeq}) {
     }
     const handleSearch = () => {
         // console.log(parsedSeq);
-        axios.get('http://192.168.1.238:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": userSeq } })
+        axios.get('http://192.168.0.18:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": userSeq } })
             .then((response) => {
                 console.log(response.data)
                 // 예를 들어 응답이 사용자 객체의 배열이라고 가정
@@ -60,7 +60,7 @@ function Friend({userSeq}) {
 
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
-        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
+        axios.post('http://192.168.0.18:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
             (response) => {
                 console.log(response.data);
                 setRequestResult(response.data)
@@ -91,7 +91,7 @@ function Friend({userSeq}) {
     };
 
     const handleFriendDelete = (e) => {
-        axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${userSeq}`).then(
+        axios.post(`http://192.168.0.18:80/friend/delete/${e.target.value}/${userSeq}`).then(
             (response)=>{
                 console.log(response.data)
             }
@@ -103,7 +103,7 @@ function Friend({userSeq}) {
     }
 
     return (
-        <div className="h-100 m-5 mt-1 mb-3">
+        <div className="h-100" style={{marginTop:"70px", marginBottom:"53px", marginLeft:"50px"}}>
         <fieldset className="h-100">
 
             {isFriendExist ? (

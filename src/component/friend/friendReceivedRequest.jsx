@@ -15,7 +15,7 @@ function FriendReceivedRequest({userSeq}) {
 
     // 컴포넌트가 마운트될 때 받은 요청 목록을 서버로부터 가져옵니다.
     useEffect(() => {
-        axios.get('http://192.168.1.238:80/friend/findReceivedRequest', { params: { "user_seq": userSeq } })
+        axios.get('http://192.168.0.4:80/friend/findReceivedRequest', { params: { "user_seq": userSeq } })
             .then(
                 (response) => {
                     console.log(response)
@@ -30,7 +30,7 @@ function FriendReceivedRequest({userSeq}) {
 
     const handleRequestDisagree=(e)=>{
         console.log(e.target.value);
-        axios.post('http://192.168.1.238:80/friend/requestDisagree',  {params:{"owner_seq":e.target.value,"user_seq":userSeq}})
+        axios.post('http://192.168.0.18:80/friend/requestDisagree',  {params:{"owner_seq":e.target.value,"user_seq":userSeq}})
     }
     return (
         <div >

@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import image1 from './image.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/esm/InputGroup';
@@ -16,13 +16,14 @@ import Roomlist from './roomlist';
 import Messenger from './messenger/messengerList';
 import GroupMessage from './messenger/groupMessenger';
 import Login from './user/login/login';
+import { ChatRoomContext } from './messenger/groupMessengerContext';
 
 function SideBar({ userSeq }) {
   console.log(userSeq);
   const [seq, setSeq] = useState('');
   const [show, setShow] = useState(false);
   const [uploadImgUrl, setUploadImgUrl] = useState("");
-
+  const { roomId, setRoomId } = useContext(ChatRoomContext);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [imgFile, setImgFile] = useState(null);
@@ -53,7 +54,7 @@ function SideBar({ userSeq }) {
 
   useEffect(() => {
     setSeq(userSeq)
-    axios.get(`http://192.168.1.238:80/chatroom`,{params:{userSeq: userSeq}})
+    axios.get(`http://192.168.0.18:80/chatroom`,{params:{userSeq: userSeq}})
       .then((response) => {
         console.log(response.data);  // 서버로부터 받은 데이터를 콘솔에 출력
         setChatRoom(response.data)
@@ -82,7 +83,7 @@ function SideBar({ userSeq }) {
   }
   const handleChatRoomInsert = () => {
     console.log("눌림");
-    axios.post('http://192.168.1.238:80/chatroom', insertParams, {
+    axios.post('http://192.168.0.18:80/chatroom', insertParams, {
       headers: {
         'Content-Type': 'application/json'
       }

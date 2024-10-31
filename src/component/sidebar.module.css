@@ -108,17 +108,23 @@
 }
 
 .mainCard{
+    
+    display: flex;
+    flex-direction: row !important;
     width:90%;
     height: 60% !important;
     margin-top: 10px;
     margin-bottom: 10px;
-    align-items:end;
-    justify-content: center;
+    /* align-items:end; */
+    justify-content: end;
     background-color: rgb(61, 61, 61) !important;
 }
 
 .cardSection{
-    width: 100%;
+    position: fixed;
+    top:0;
+    z-index: 1;
+    width: 76%;
     height: 10%;
     display: flex;
     justify-content: center;
@@ -131,15 +137,12 @@
     font-size: 20px;
 }
 
-.signupProfileImgLabel {
-  margin: 5px 0 20px 0;
-  font-weight: bold;
-  font-size: 13px;
-  color: #0095f6;
-  display: inline-block;
-  cursor: pointer;
-}
-
 input[type="file"]  {
   display: none;
+}
+
+.CalendarModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

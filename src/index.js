@@ -13,10 +13,13 @@ import FriendRequest from './component/friend/friendRequest';
 import MessengerList from './component/messenger/messengerList';
 import SideBar from './component/sidebar';
 import GroupMessage from './component/messenger/groupMessenger'
+import { ChatRoomProvider } from './component/messenger/groupMessengerContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <React.StrictMode>
   <BrowserRouter>
+  <ChatRoomProvider>
     <WebSocketProvider>
       <Routes>
         <Route path='/' element={<App />}></Route>
@@ -30,7 +33,9 @@ root.render(
         <Route path="/groupMessenger/:chatroomId" element={<GroupMessage/>}></Route>
       </Routes>
     </WebSocketProvider>
+    </ChatRoomProvider>
   </BrowserRouter>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

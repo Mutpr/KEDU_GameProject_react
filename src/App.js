@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+import { ChatRoomProvider } from './component/messenger/groupMessengerContext';
 
 function App() {
+  // const ChatRoomContext = createContext({ chatRoomId: null, setChatRoomId: undefined });
   const navigate = useNavigate();
 
   const handleMessenger = () => {
@@ -17,6 +19,12 @@ function App() {
       <button onClick={handleLogin}>로그인</button>
     </div>
   );
+}
+
+const root = () =>{
+  <ChatRoomProvider>
+    <App />
+  </ChatRoomProvider>
 }
 
 export default App;

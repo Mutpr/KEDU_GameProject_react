@@ -18,7 +18,7 @@ function Roomlist({userSeq}) {
       // 쿼리 파라미터 생성
       const queryParams = new URLSearchParams({"userSeq": userSeq}).toString();
       // URL 생성
-      const url = `http://192.168.1.238:9999/getRoomList?${queryParams}`;
+      const url = `http://192.168.0.18:9999/getRoomList?${queryParams}`;
       
       // 비동기 요청 실행
       const fetchData = async () => {

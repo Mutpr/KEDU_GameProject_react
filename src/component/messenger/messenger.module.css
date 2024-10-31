@@ -1,17 +1,22 @@
+/* CSS */
+.preview {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    flex-grow: 1; /* 파일 이름이 가능한 넓은 영역을 차지하도록 */
+    word-wrap: break-word;
+    color:black;
+}
+
 .container {
-    position: relative;
-    width: 300px;
-  }
-  
-  textarea {
-    width: 100%;
-    height: 100px;
-    padding-right: 40px; /* 버튼의 공간 확보 */
-    box-sizing: border-box; /* padding 포함하여 width 계산 */
-  }
-  
-  button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-  }
+    display: flex !important;
+    align-items: baseline; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 가로로 간격을 맞춤 */
+    width: 100%; /* 컨테이너가 전체 너비를 차지 */
+    bottom: 30px;
+    opacity: 0.8;
+}
+
+
