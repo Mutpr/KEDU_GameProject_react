@@ -12,14 +12,16 @@ import FriendReceivedRequest from "./friendReceivedRequest";
 import { DATA } from './MAIN_DATA';
 import { Cookies } from "react-cookie";
 import Swal from 'sweetalert2'
+import FriendList from "./friendList";
 
-function Friend() {
+function Friend({userSeq}) {
+    console.log(userSeq);
     const navigate = useNavigate(); // useNavigate를 함수의 최상위에서 호출
 
     const [isFriendExist, setIsFriendExist] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [userList, setUserList] = useState([]);
-    const userSeq = useParams();
+    // const userSeq = useParams();
     const [content, setContent] = useState();
 
 
@@ -28,14 +30,11 @@ function Friend() {
 
     const [searchKeyword, setSearchKeyword] = useState('');
 
-    const stringifiedSeq = JSON.stringify(userSeq);
-    const parsedSeq = JSON.parse(stringifiedSeq).userSeq;
-
     const [requestResult, setRequestResult] = useState('');
     const [friendList, setFriendList] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://192.168.1.238:80/friend/${parsedSeq}`).then(
+        axios.get(`http://192.168.0.18:80/friend/${userSeq}`).then(
             (response) => {
                 console.log(response.data)
                 setFriendList(response.data);
@@ -43,12 +42,13 @@ function Friend() {
         )
     }, []);
     const selectComponent = {
-        first: <FriendRequest />,
-        second: <FriendReceivedRequest />
+        first: <FriendRequest userSeq={userSeq}/>,
+        second: <FriendReceivedRequest userSeq={userSeq} />,
+        third: <FriendList userSeq={userSeq}/>
     }
     const handleSearch = () => {
-        console.log(parsedSeq);
-        axios.get('http://192.168.1.238:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": parsedSeq } })
+        // console.log(parsedSeq);
+        axios.get('http://192.168.0.18:80/friend/userSearch', { params: { "searchKeyword": searchKeyword, "userSeq": userSeq } })
             .then((response) => {
                 console.log(response.data)
                 // 예를 들어 응답이 사용자 객체의 배열이라고 가정
@@ -60,14 +60,23 @@ function Friend() {
 
     const handleFriendAdd = (e) => {
         // console.log(e.target.value)
-        axios.post('http://192.168.0.100:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+        axios.post('http://192.168.0.18:80/friend/addFriend', { params: { "friend_request_owner_seq": userSeq, "friend_request_sender_seq": e.target.value } }).then(
+=======
+        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+>>>>>>> Stashed changes
+=======
+        axios.post('http://192.168.1.238:80/friend/addFriend', { params: { "friend_request_owner_seq": parsedSeq, "friend_request_sender_seq": e.target.value } }).then(
+>>>>>>> Stashed changes
             (response) => {
                 console.log(response.data);
                 setRequestResult(response.data)
                 if (response.data === '친구 요청을 전송하는데 성공했습니다') {
                     Swal.fire({
+                        icon: "success",
                         text: response.data,
-                        icon: "success"
+                        
                     });
                 } else if (response.data === '친구 요청을 전송하는데 실패했습니다.') {
                     Swal.fire({
@@ -91,19 +100,32 @@ function Friend() {
     };
 
     const handleFriendDelete = (e) => {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+        axios.post(`http://192.168.0.18:80/friend/delete/${e.target.value}/${userSeq}`).then(
+=======
+=======
+>>>>>>> Stashed changes
+
+        //alert 띄울것
         axios.post(`http://192.168.1.238:80/friend/delete/${e.target.value}/${parsedSeq}`).then(
+>>>>>>> Stashed changes
             (response)=>{
                 console.log(response.data)
             }
         )
     }
 
+    const handleChat=(e)=>{
+        navigate(`/messengerList/${e.target.value}/${userSeq}`)
+    }
+
     return (
-        <fieldset>
-            <h1>친구창</h1>
+        <div className="h-100" style={{marginTop:"70px", marginBottom:"53px", marginLeft:"50px"}}>
+        <fieldset className="h-100">
 
             {isFriendExist ? (
-                <div>
+                <div className="h-100">
                     <Button className="m-1" onClick={handleShow}>친구 추가</Button>
                     {
                         DATA.map(data => (
@@ -112,18 +134,20 @@ function Friend() {
                             </Button>
                         ))
                     }
-                    <h4>친구 목록</h4>
+                    <h3>친구 목록</h3>
                     {friendList.map((item, idx) => (
                         <div key={idx}><h5>{item.user_name}</h5>
                             <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                            <button onClick={handleChat} value={item.user_seq}> 채팅</button>
                             <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
+                            
                         </div>
                     ))
                     }
                     {selectComponent[content]}
                 </div>
             ) : (
-                <div>
+                <div className="h-100">
                     <Button className="m-1" onClick={handleShow}>친구 추가</Button>
                     {
                         DATA.map(data => (
@@ -132,10 +156,11 @@ function Friend() {
                             </Button>
                         ))
                     }
-                    <h4>친구 목록</h4>
+                    <h3>친구 목록</h3>
                     {friendList.map((item, idx) => (
                         <div key={idx}><h5>{item.user_name}</h5>
                             <h6> &nbsp; &nbsp; # &nbsp; {item.user_tag_id}</h6>
+                            <button onClick={handleChat} value={item.user_seq}> 채팅</button>
                             <button onClick={handleFriendDelete} value={item.user_seq}> 친구삭제</button>
                         </div>
                     ))
@@ -178,6 +203,7 @@ function Friend() {
                 </Modal.Footer>
             </Modal>
         </fieldset>
+        </div>
     );
 }
 

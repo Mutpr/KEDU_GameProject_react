@@ -1,16 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { ChatRoomProvider } from './component/messenger/groupMessengerContext';
 
 function App() {
-  const navigate = useNavigate(); // Get the navigate function from useNavigate hook
+  // const ChatRoomContext = createContext({ chatRoomId: null, setChatRoomId: undefined });
+  const navigate = useNavigate();
 
-  // Handler for navigating to the messenger route
   const handleMessenger = () => {
-    navigate('/messenger'); // Navigate to the /messenger route
+    navigate('/messenger/');
   };
-  
-  // Handler for navigating to the login route
   const handleLogin = () => {
-    navigate('/login'); // Navigate to the /login route
+    navigate('/login');
   }
 
   // Render two buttons for navigation
@@ -20,6 +19,12 @@ function App() {
       <button onClick={handleLogin}>로그인</button>
     </div>
   );
+}
+
+const root = () =>{
+  <ChatRoomProvider>
+    <App />
+  </ChatRoomProvider>
 }
 
 export default App;
